@@ -9,7 +9,7 @@ public class LookScript : MonoBehaviour {
 	private GameObject playerCamera;
 
 	[SerializeField]
-	private float lookSensitivity = 10.0f;
+	private float lookSensitivity = 150.0f;
 	#endregion
 
 	#region Variable Declarations
@@ -24,7 +24,8 @@ public class LookScript : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
-
+		HorizontalRotation();
+		VerticalRotation();
 	}
 
 	private void HorizontalRotation() {
@@ -32,8 +33,31 @@ public class LookScript : MonoBehaviour {
 		if(lookVector.x > 0.0f) {
 			playerRotation.y += lookSensitivity * Time.deltaTime;
 		} else if(lookVector.x < 0.0f) {
-			playerRotation.x -= lookSensitivity * Time.deltaTime;
+			playerRotation.y -= lookSensitivity * Time.deltaTime;
 		}
+		Debug.Log("Horizontal Rotation: " + playerRotation.y);
+
+		//This actually moves the player characters camera and movement.
+		transform.localRotation = Quaternion.Euler(0.0f, playerRotation.y, 0.0f);
+	}
+
+	private void VerticalRotation() {
+		Vector3 playerRotation = playerCamera.transform.rotation.eulerAngles;
+		if(lookVector.y > 0.0f) {
+			playerRotation.x -= lookSensitivity * Time.deltaTime;
+
+			//Clamp Rotation to -90 and 90.
+			playerRotation.x = Mathf.Clamp(playerRotation.x, -90.0f, 90.0f);
+		} else if(lookVector.y < 0.0f) {
+			playerRotation.x += lookSensitivity * Time.deltaTime;
+
+			//Clamp Rotation to -90 and 90.
+			playerRotation.x = Mathf.Clamp(playerRotation.x, -90.0f, 90.0f);
+		}
+		Debug.Log("Vertical Rotation: " + playerRotation.x);
+
+		//This actually moves the player characters camera and movement.
+		playerCamera.transform.localRotation = Quaternion.Euler(playerRotation.x, 0.0f, 0.0f);
 	}
 
 	private void OnLook(InputValue value) {
