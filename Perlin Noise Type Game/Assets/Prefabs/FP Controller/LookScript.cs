@@ -14,6 +14,7 @@ public class LookScript : MonoBehaviour {
 
 	#region Variable Declarations
 	private Vector2 lookVector = Vector2.zero;
+	private Quaternion horizontalRotation = Quaternion.identity;
 	#endregion
 
 	#region Private Functions
@@ -35,26 +36,19 @@ public class LookScript : MonoBehaviour {
 		} else if(lookVector.x < 0.0f) {
 			playerRotation.y -= lookSensitivity * Time.deltaTime;
 		}
-		Debug.Log("Horizontal Rotation: " + playerRotation.y);
 
 		//This actually moves the player characters camera and movement.
-		transform.localRotation = Quaternion.Euler(0.0f, playerRotation.y, 0.0f);
+		horizontalRotation = Quaternion.Euler(0.0f, playerRotation.y, 0.0f);
+		transform.localRotation = horizontalRotation;
 	}
 
 	private void VerticalRotation() {
 		Vector3 playerRotation = playerCamera.transform.rotation.eulerAngles;
 		if(lookVector.y > 0.0f) {
 			playerRotation.x -= lookSensitivity * Time.deltaTime;
-
-			//Clamp Rotation to -90 and 90.
-			playerRotation.x = Mathf.Clamp(playerRotation.x, -90.0f, 90.0f);
 		} else if(lookVector.y < 0.0f) {
 			playerRotation.x += lookSensitivity * Time.deltaTime;
-
-			//Clamp Rotation to -90 and 90.
-			playerRotation.x = Mathf.Clamp(playerRotation.x, -90.0f, 90.0f);
 		}
-		Debug.Log("Vertical Rotation: " + playerRotation.x);
 
 		//This actually moves the player characters camera and movement.
 		playerCamera.transform.localRotation = Quaternion.Euler(playerRotation.x, 0.0f, 0.0f);
@@ -67,6 +61,12 @@ public class LookScript : MonoBehaviour {
 	#endregion
 
 	#region Public Access Functions (Getters and Setters)
-
+	/// <summary>
+	/// Returns the horizontal rotation of the object.
+	/// </summary>
+	/// <returns></returns>
+	public Quaternion GetHorizontalRotation() {
+		return horizontalRotation;
+	}
 	#endregion
 }

@@ -51,6 +51,7 @@ public class PlayerMovementScript : MonoBehaviour {
 
 		playerVelocity.x = i_Movement.x;
 		playerVelocity.z = i_Movement.y;
+		playerVelocity = gameObject.GetComponent<LookScript>().GetHorizontalRotation() * playerVelocity;
 		playerController.Move(playerVelocity);
 	}
 
