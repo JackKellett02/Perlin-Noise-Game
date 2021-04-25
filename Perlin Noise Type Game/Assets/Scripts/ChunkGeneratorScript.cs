@@ -79,13 +79,14 @@ public class ChunkGeneratorScript : MonoBehaviour {
 						Vector3 posToSpawnBlock = new Vector3(x + gameObject.transform.position.x - (width / 2), y, z + gameObject.transform.position.z - (length / 2));
 						if(y == (int)noiseMap[x, z]) {
 							Instantiate(grassBlockPrefab, posToSpawnBlock, rotationToSpawnBlock, gameObject.transform);
-						} else if (y >= (int)noiseMap[x, z] - 1) {
+						} else {
 							Instantiate(dirtBlockPrefab, posToSpawnBlock, rotationToSpawnBlock, gameObject.transform);
 						}
 					}
 				}
 			}
 		}
+		gameObject.GetComponent<CombineMeshesScript>().CombineMeshes();
 	}
 	#endregion
 
